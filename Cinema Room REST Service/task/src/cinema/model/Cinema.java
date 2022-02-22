@@ -39,12 +39,15 @@ public class Cinema {
     }
 
     public void buyTicket(Seat seat) {
-        LOGGER.log(INFO, "{0} {1}", seat, getIndex(seat));
+        LOGGER.log(INFO, "{0} {1} {2}", seat, getIndex(seat), seats.get(getIndex(seat)));
         seats.clear(getIndex(seat));
-        LOGGER.log(INFO, seats.get(getIndex(seat)));
     }
 
     public boolean isFree(Seat value) {
         return seats.get(getIndex(value));
+    }
+
+    public boolean isValid(Seat seat) {
+        return seat.column() > 0 && seat.column() < 10 && seat.row() > 0 && seat.row() < 10;
     }
 }

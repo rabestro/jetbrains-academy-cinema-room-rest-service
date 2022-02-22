@@ -6,9 +6,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import static java.lang.annotation.ElementType.PARAMETER;
+import static java.lang.annotation.ElementType.TYPE;
 
-@Target({PARAMETER})
+@Target({TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = {FreeSeatValidator.class})
 public @interface FreeSeat {
