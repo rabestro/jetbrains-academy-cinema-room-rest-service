@@ -1,6 +1,8 @@
 package cinema.controller;
 
 import cinema.dto.PurchaseConfirmation;
+import cinema.dto.RefundConfirmation;
+import cinema.dto.RefundRequest;
 import cinema.model.Cinema;
 import cinema.model.Seat;
 import org.springframework.http.HttpStatus;
@@ -41,5 +43,13 @@ public class CinemaController {
         }
         return new ResponseEntity<>(Map.of("error", "The ticket has been already purchased!"),
                 HttpStatus.BAD_REQUEST);
+    }
+
+    @PostMapping("return")
+    public ResponseEntity<Object> refund(@RequestBody RefundRequest request) {
+        return cinema.refund(request.token())
+                .map(RefundConfirmation::new)
+                .<ResponseEntity<Object>>map(ResponseEntity::ok)
+                .orElse(ResponseEntity.badRequest().body(Map.of("error", "Wrong token!")));
     }
 }
