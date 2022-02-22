@@ -1,10 +1,19 @@
 GET http://localhost:28852/seats
 
-###
+### buy ticket 57
 POST http://localhost:28852/purchase
 Content-Type: application/json
 
 {
   "row": 5,
   "column": 7
+}
+
+### buy ticket 11
+POST http://localhost:28852/purchase
+Content-Type: application/json
+
+{
+  "row": 1,
+  "column": 1
 }

@@ -1,14 +1,20 @@
 package cinema.controller;
 
-import cinema.dto.PurchaseConfirmation;
 import cinema.model.Cinema;
 import cinema.model.Seat;
+import cinema.validation.FreeSeat;
+import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
+@Validated
 @RestController
 @RequestMapping("/")
 public class CinemaController {
@@ -26,9 +32,9 @@ public class CinemaController {
     }
 
     @PostMapping("purchase")
-    public PurchaseConfirmation purchase(@RequestBody Seat seat) {
-        LOGGER.log(System.Logger.Level.INFO, seat);
-        var price = cinema.buyTicket(seat);
-        return new PurchaseConfirmation(seat, price);
+    @ResponseStatus(HttpStatus.OK)
+    public Seat purchase(@Valid @FreeSeat @RequestBody Seat seat) {
+        cinema.buyTicket(seat);
+        return seat;
     }
 }
