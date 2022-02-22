@@ -13,6 +13,10 @@ public class Cinema {
 
     private final BitSet seats = new BitSet(totalRows * totalColumns);
 
+    {
+        seats.flip(0, totalRows * totalColumns);
+    }
+
     public int getTotalRows() {
         return totalRows;
     }
@@ -22,7 +26,7 @@ public class Cinema {
     }
 
     public List<Seat> getAvailableSeats() {
-        IntFunction<Seat> seatBuilder = i -> new Seat(i / totalRows, i % totalColumns);
+        IntFunction<Seat> seatBuilder = i -> new Seat(1 + i / totalRows, 1 + i % totalColumns);
         return seats.stream().mapToObj(seatBuilder).toList();
     }
 }
