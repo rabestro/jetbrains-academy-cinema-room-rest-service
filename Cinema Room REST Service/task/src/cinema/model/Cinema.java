@@ -1,5 +1,6 @@
 package cinema.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.stereotype.Component;
 
 import java.util.BitSet;
@@ -10,7 +11,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.IntFunction;
 
-import static java.lang.System.Logger.Level.INFO;
+import static java.lang.System.Logger.Level.DEBUG;
 
 @Component
 public class Cinema {
@@ -43,16 +44,20 @@ public class Cinema {
     }
 
     public String buyTicket(Seat seat) {
-        LOGGER.log(INFO, "{0} {1} {2}", seat, getIndex(seat), seats.get(getIndex(seat)));
+        LOGGER.log(DEBUG, "{0} {1} {2}", seat, getIndex(seat), seats.get(getIndex(seat)));
         seats.clear(getIndex(seat));
         var token = UUID.randomUUID().toString();
         reserved.put(token, seat);
         return token;
     }
 
+    @JsonIgnore
+    public Report getReport() {
+        var income = reserved.values().stream().mapToInt(Seat::getPrice).sum();
+        return new Report(income, seats.cardinality(), reserved.size());
+    }
+
     public Optional<Seat> refund(String token) {
-        LOGGER.log(INFO, "token: {0}", token);
-        LOGGER.log(INFO, reserved);
         var seat = reserved.remove(token);
         if (seat != null) {
             seats.set(getIndex(seat));
