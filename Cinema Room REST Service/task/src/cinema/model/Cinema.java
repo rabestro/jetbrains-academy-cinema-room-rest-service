@@ -3,7 +3,10 @@ package cinema.model;
 import org.springframework.stereotype.Component;
 
 import java.util.BitSet;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.function.IntFunction;
 
 import static java.lang.System.Logger.Level.INFO;
@@ -14,7 +17,7 @@ public class Cinema {
 
     private final int totalRows = 9;
     private final int totalColumns = 9;
-
+    private final Map<Seat, UUID> tokens = new HashMap<>();
     private final BitSet seats = new BitSet(totalRows * totalColumns);
 
     {
@@ -38,9 +41,12 @@ public class Cinema {
         return seat.row() * totalColumns + seat.column() - totalColumns - 1;
     }
 
-    public void buyTicket(Seat seat) {
+    public UUID buyTicket(Seat seat) {
         LOGGER.log(INFO, "{0} {1} {2}", seat, getIndex(seat), seats.get(getIndex(seat)));
         seats.clear(getIndex(seat));
+        var token = UUID.randomUUID();
+        tokens.put(seat, token);
+        return token;
     }
 
     public boolean isFree(Seat value) {

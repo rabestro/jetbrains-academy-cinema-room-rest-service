@@ -1,5 +1,6 @@
 package cinema.controller;
 
+import cinema.dto.PurchaseConfirmation;
 import cinema.model.Cinema;
 import cinema.model.Seat;
 import org.springframework.http.HttpStatus;
@@ -16,8 +17,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("/")
 public class CinemaController {
-    private static final System.Logger LOGGER = System.getLogger(CinemaController.class.getName());
-
     private final Cinema cinema;
 
     public CinemaController(Cinema cinema) {
@@ -37,8 +36,8 @@ public class CinemaController {
                     HttpStatus.BAD_REQUEST);
         }
         if (cinema.isFree(seat)) {
-            cinema.buyTicket(seat);
-            return new ResponseEntity<>(seat, HttpStatus.OK);
+            var token = cinema.buyTicket(seat);
+            return new ResponseEntity<>(new PurchaseConfirmation(token, seat), HttpStatus.OK);
         }
         return new ResponseEntity<>(Map.of("error", "The ticket has been already purchased!"),
                 HttpStatus.BAD_REQUEST);
