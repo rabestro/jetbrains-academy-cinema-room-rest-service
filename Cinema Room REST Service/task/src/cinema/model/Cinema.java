@@ -29,4 +29,13 @@ public class Cinema {
         IntFunction<Seat> seatBuilder = i -> new Seat(1 + i / totalRows, 1 + i % totalColumns);
         return seats.stream().mapToObj(seatBuilder).toList();
     }
+
+    private int getIndex(Seat seat) {
+        return seat.row() * totalColumns + seat.column() - totalColumns;
+    }
+
+    public int buyTicket(Seat seat) {
+        seats.set(getIndex(seat), false);
+        return seat.row() < 5 ? 10 : 8;
+    }
 }
